@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Delina Shiro — Restaurant Manager</title>
+<meta name="application-name" content="Delina Shiro"/>
+<meta name="description" content="Restaurant finance and inventory manager for Delina Shiro"/>
+<meta name="theme-color" content="#0F6E56"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Delina Shiro"/>
+<link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Delina%20Shiro%22,%22short_name%22:%22Delina%20Shiro%22,%22description%22:%22Restaurant%20finance%20and%20inventory%20manager%22,%22start_url%22:%22.%2F%22,%22display%22:%22standalone%22,%22background_color%22:%22%23F7F3EC%22,%22theme_color%22:%22%230F6E56%22,%22orientation%22:%22portrait%22,%22icons%22:[{%22src%22:%22data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20512%20512'%3E%3Crect%20width%3D'512'%20height%3D'512'%20rx%3D'80'%20fill%3D'%230F6E56'%2F%3E%3Ccircle%20cx%3D'256'%20cy%3D'256'%20r%3D'180'%20fill%3D'%23E1F5EE'%20stroke%3D'%23fff'%20stroke-width%3D'8'%2F%3E%3Ccircle%20cx%3D'256'%20cy%3D'256'%20r%3D'70'%20fill%3D'%230F6E56'%2F%3E%3Ccircle%20cx%3D'256'%20cy%3D'256'%20r%3D'35'%20fill%3D'%23FAC775'%2F%3E%3C%2Fsvg%3E%22,%22sizes%22:%22512x512%22,%22type%22:%22image/svg+xml%22,%22purpose%22:%22any%20maskable%22}]}"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --teal:#0F6E56;--teal2:#1D9E75;--teal3:#E1F5EE;
+  --amber:#BA7517;--amber2:#FAC775;--amber3:#FAEEDA;
+  --coral:#D85A30;--coral3:#FAECE7;
+  --text:#2C2C2A;--text2:#5F5E5A;--text3:#888780;
+  --bg:#F7F3EC;--surface:#fff;--border:rgba(0,0,0,0.1);
+  --r:10px;--r2:14px;
+  --fd:'Playfair Display',serif;--fb:'DM Sans',sans-serif;
+}
+body{background:var(--bg);font-family:var(--fb);color:var(--text);min-height:100vh}
+/* HEADER */
+.hdr{background:var(--teal);padding:12px 20px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.18)}
+.logo-wrap{width:46px;height:46px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-wrap svg{width:30px;height:30px}
+.hdr-title h1{font-family:var(--fd);font-size:18px;color:#fff;font-weight:700}
+.hdr-title p{font-size:10px;color:rgba(255,255,255,.65);margin-top:1px}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:18px}
+.eth-clock .ec-date{font-size:10px;color:rgba(255,255,255,.6);text-align:right}
+.eth-clock .ec-time{font-family:var(--fd);font-size:17px;color:var(--amber2);font-weight:700;text-align:right;line-height:1.1}
+.eth-clock .ec-day{font-size:10px;color:rgba(255,255,255,.7);text-align:right}
+.hdr-rev .rl{font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;text-align:right}
+.hdr-rev .rv{font-family:var(--fd);font-size:19px;color:var(--amber2);font-weight:700;text-align:right}
+/* TABS */
+.tabs{display:flex;background:#0a5a45;padding:0 20px;overflow-x:auto;gap:0}
+.tab{padding:8px 14px;font-size:12px;font-weight:500;color:rgba(255,255,255,.6);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;background:none;border-left:none;border-right:none;border-top:none;white-space:nowrap;font-family:var(--fb)}
+.tab:hover{color:#fff}.tab.active{color:#fff;border-bottom-color:var(--amber2)}
+/* LAYOUT */
+.app{max-width:1100px;margin:0 auto;padding:16px 14px}
+.section{display:none}.section.active{display:block}
+/* METRICS */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px;margin-bottom:14px}
+.metric{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r);padding:11px 13px}
+.ml{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+.mv{font-family:var(--fd);font-size:19px;font-weight:700}
+.ms{font-size:10px;color:var(--text2);margin-top:2px}
+.metric.teal{background:var(--teal3)}.metric.teal .mv{color:var(--teal)}
+.metric.amber{background:var(--amber3)}.metric.amber .mv{color:var(--amber)}
+.metric.coral{background:var(--coral3)}.metric.coral .mv{color:var(--coral)}
+/* CARDS */
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r2);margin-bottom:12px;overflow:hidden}
+.card-head{padding:10px 14px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px}
+.card-head h3{font-size:13px;font-weight:500}
+/* TABLES */
+.tbl{width:100%;font-size:12px;border-collapse:collapse}
+.tbl th{text-align:left;padding:7px 11px;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.4px;color:var(--text3);background:var(--bg);border-bottom:0.5px solid var(--border);white-space:nowrap}
+.tbl td{padding:8px 11px;border-bottom:0.5px solid var(--border);color:var(--text);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:#f5f1ea}
+.tbl td.num,.tbl th.num{text-align:right;font-variant-numeric:tabular-nums}
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:500}
+.bg{background:var(--teal3);color:var(--teal)}.ba{background:var(--amber3);color:var(--amber)}
+.br{background:var(--coral3);color:var(--coral)}.bx{background:#f0ede8;color:var(--text3)}
+/* BUTTONS */
+.btn{padding:7px 14px;border:none;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--fb)}
+.btn-teal{background:var(--teal);color:#fff}.btn-teal:hover{background:var(--teal2)}
+.btn-amber{background:var(--amber);color:#fff}.btn-amber:hover{background:#a36512}
+.btn-coral{background:var(--coral);color:#fff}.btn-coral:hover{background:#b84d28}
+.btn-sm{padding:4px 10px;border:none;border-radius:6px;font-size:11px;font-weight:500;cursor:pointer;font-family:var(--fb)}
+.btn-ghost{background:none;border:0.5px solid var(--border);color:var(--text2)}.btn-ghost:hover{background:var(--bg)}
+/* FILTER BUTTONS */
+.fbtn{padding:4px 10px;border-radius:6px;font-size:11px;border:0.5px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;font-family:var(--fb)}
+.fbtn:hover{background:var(--teal3);color:var(--teal)}.fbtn.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+.frow{display:flex;gap:5px;flex-wrap:wrap}
+/* FORMS */
+.form-grid{display:grid;gap:9px;padding:13px}
+.fr{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.fr label{font-size:12px;color:var(--text2);width:100px;flex-shrink:0}
+.fr input,.fr select,.fr textarea{flex:1;min-width:130px;padding:7px 9px;border:0.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--surface);font-family:var(--fb)}
+.fr input:focus,.fr select:focus,.fr textarea:focus{outline:none;border-color:var(--teal2)}
+/* INLINE INPUTS in tables */
+.tinp{padding:4px 7px;border:0.5px solid var(--border);border-radius:5px;font-size:11px;background:var(--bg);font-family:var(--fb);text-align:right;width:70px}
+.tinp:focus{outline:none;border-color:var(--teal2)}
+/* CHARTS */
+.wk-chart{padding:12px 14px}
+.c-bars{display:flex;align-items:flex-end;gap:5px;height:110px}
+.c-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.c-bar{width:100%;border-radius:4px 4px 0 0;min-height:4px;background:var(--teal2)}
+.c-bar.hi{background:var(--amber)}.c-lbl{font-size:9px;color:var(--text3)}.c-v{font-size:9px;font-weight:500;color:var(--text2)}
+.br-row{display:flex;align-items:center;gap:7px;padding:6px 13px;border-bottom:0.5px solid var(--border)}
+.br-row:last-child{border-bottom:none}
+.br-lbl{font-size:11px;width:110px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.br-track{flex:1;height:6px;background:var(--bg);border-radius:3px;overflow:hidden}
+.br-fill{height:100%;border-radius:3px;background:var(--teal2)}
+.br-val{font-size:11px;font-weight:500;color:var(--text2);min-width:60px;text-align:right}
+/* DAILY HERO */
+.daily-hero{background:linear-gradient(135deg,var(--teal) 0%,#063d2d 100%);border-radius:var(--r2);padding:18px 20px;margin-bottom:12px;color:#fff;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.dh-eth{flex:1;min-width:160px}
+.dh-lbl{font-size:10px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.dh-date{font-family:var(--fd);font-size:22px;font-weight:700;color:var(--amber2)}
+.dh-greg{font-size:11px;color:rgba(255,255,255,.55);margin-top:2px}
+.dh-clk{font-size:16px;color:#fff;margin-top:5px;font-weight:500}
+.dh-stats{display:flex;gap:10px;flex-wrap:wrap}
+.ds{background:rgba(255,255,255,.12);border-radius:9px;padding:10px 16px;text-align:center;min-width:90px}
+.ds-v{font-family:var(--fd);font-size:20px;font-weight:700;color:var(--amber2)}
+.ds-l{font-size:10px;color:rgba(255,255,255,.65);margin-top:1px}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border-radius:var(--r2);padding:20px;max-width:500px;width:90%;max-height:90vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.25)}
+.modal h2{font-family:var(--fd);font-size:16px;font-weight:600;margin-bottom:14px}
+.modal-close{float:right;background:none;border:none;font-size:18px;cursor:pointer;color:var(--text3);margin-top:-2px}
+/* SCROLL */
+.scroll-wrap{overflow-x:auto;max-height:400px;overflow-y:auto}
+/* TOAST */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--teal);color:#fff;padding:10px 18px;border-radius:9px;font-size:12px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:9999;font-family:var(--fb);box-shadow:0 4px 16px rgba(0,0,0,.2)}
+.toast.show{opacity:1}
+/* PRICE EDIT */
+.price-cell{cursor:pointer;color:var(--teal);font-weight:500;text-decoration:underline dotted}
+/* INVENTORY BUY/SELL */
+.inv-section{font-size:11px;font-weight:500;color:var(--text3);background:var(--bg);padding:5px 11px;border-bottom:0.5px solid var(--border);text-transform:uppercase;letter-spacing:.5px}
+@media(max-width:600px){.hdr-right{flex-direction:column;gap:4px;align-items:flex-end}.dh-stats{width:100%}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="logo-wrap">
+    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="18" cy="18" r="17" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1.5"/>
+      <path d="M18 8C12 8 8 13 8 18s4 10 10 10 10-5 10-10" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      <path d="M18 8c6 0 10 5 10 10" stroke="#BA7517" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      <circle cx="18" cy="18" r="5" fill="#0F6E56"/>
+      <circle cx="18" cy="18" r="2.5" fill="#FAC775"/>
+      <path d="M18 10V7M18 29v-3M10 18H7M29 18h-3" stroke="#1D9E75" stroke-width="1" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="hdr-title"><h1>Delina Shiro</h1><p>Restaurant Finance &amp; Inventory</p></div>
+  <div class="hdr-right">
+    <div class="eth-clock">
+      <div class="ec-date" id="ec-date">—</div>
+      <div class="ec-time" id="ec-time">00:00:00</div>
+      <div class="ec-day" id="ec-day">—</div>
+    </div>
+    <div class="hdr-rev">
+      <div class="rl">Today's Revenue</div>
+      <div class="rv" id="hdr-rev">0 ETB</div>
+    </div>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('dashboard',this)">📊 Dashboard</button>
+  <button class="tab" onclick="switchTab('daily',this)">📅 Daily Sales</button>
+  <button class="tab" onclick="switchTab('inventory',this)">📦 Inventory</button>
+  <button class="tab" onclick="switchTab('menu',this)">📋 Menu</button>
+  <button class="tab" onclick="switchTab('reports',this)">💰 Reports</button>
+</div>
+
+<div class="app">
+
+<!-- ═══ DASHBOARD ═══ -->
+<div class="section active" id="tab-dashboard">
+  <div class="metrics">
+    <div class="metric teal"><div class="ml">Weekly Revenue</div><div class="mv">138,680</div><div class="ms">ETB</div></div>
+    <div class="metric"><div class="ml">Vegan Food</div><div class="mv">84,800</div><div class="ms">ETB · 61.2%</div></div>
+    <div class="metric"><div class="ml">Beverages</div><div class="mv">46,405</div><div class="ms">ETB · 33.5%</div></div>
+    <div class="metric amber"><div class="ml">Best Day</div><div class="mv">Q5</div><div class="ms">26,280 ETB</div></div>
+  </div>
+  <div class="card">
+    <div class="card-head"><h3>Daily Revenue — Q1 to Q7</h3></div>
+    <div class="wk-chart">
+      <div class="c-bars" id="db-bars"></div>
+      <div class="c-bars" id="db-lbls" style="height:auto;margin-top:3px;align-items:flex-start"></div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div class="card">
+      <div class="card-head"><h3>Top Items by Revenue</h3></div>
+      <div id="top-bars"></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>Today Live</h3></div>
+      <div style="padding:12px;display:grid;gap:8px">
+        <div class="metric teal" style="margin:0"><div class="ml">Transactions</div><div class="mv" id="d-txn">0</div></div>
+        <div class="metric amber" style="margin:0"><div class="ml">Revenue</div><div class="mv" id="d-rev">0</div><div class="ms">ETB</div></div>
+        <div class="metric" style="margin:0"><div class="ml">Units Sold</div><div class="mv" id="d-units">0</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DAILY SALES ═══ -->
+<div class="section" id="tab-daily">
+  <div class="daily-hero">
+    <div class="dh-eth">
+      <div class="dh-lbl">Ethiopian Calendar</div>
+      <div class="dh-date" id="dh-date">Loading…</div>
+      <div class="dh-greg" id="dh-greg">—</div>
+      <div class="dh-clk" id="dh-clk">00:00:00</div>
+    </div>
+    <div class="dh-stats">
+      <div class="ds"><div class="ds-v" id="ds-txn">0</div><div class="ds-l">Transactions</div></div>
+      <div class="ds"><div class="ds-v" id="ds-rev">0</div><div class="ds-l">ETB Today</div></div>
+      <div class="ds"><div class="ds-v" id="ds-units">0</div><div class="ds-l">Units Sold</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-head"><h3>Record Sale</h3></div>
+    <div class="form-grid">
+      <div class="fr"><label>Category</label>
+        <select id="sl-cat" onchange="refreshSaleItems()">
+          <option value="">— All —</option>
+          <option value="bar">Beverage</option>
+          <option value="vegan">Vegan Food</option>
+          <option value="nonvegan">Non-Vegan Food</option>
+          <option value="other">Other Food</option>
+        </select>
+      </div>
+      <div class="fr"><label>Item</label><select id="sl-item"></select></div>
+      <div class="fr"><label>Unit Price (ETB)</label><input type="number" id="sl-price" min="0" step="1" placeholder="Auto-filled, editable"/></div>
+      <div class="fr"><label>Quantity</label><input type="number" id="sl-qty" value="1" min="1"/></div>
+      <div class="fr"><label>Note</label><input type="text" id="sl-note" placeholder="table, takeaway…"/></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-teal" style="flex:1" onclick="addSale()">+ Record Sale</button>
+        <button class="btn btn-amber" onclick="exportCSV()">⬇ Export CSV</button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-head">
+      <h3>Today's Sales Log</h3>
+      <div class="frow">
+        <button class="fbtn active" onclick="filterSales(this,'all')">All</button>
+        <button class="fbtn" onclick="filterSales(this,'bar')">Beverages</button>
+        <button class="fbtn" onclick="filterSales(this,'vegan')">Vegan</button>
+        <button class="fbtn" onclick="filterSales(this,'nonvegan')">Non-Vegan</button>
+        <button class="fbtn" onclick="filterSales(this,'other')">Other</button>
+      </div>
+    </div>
+    <div class="scroll-wrap">
+      <table class="tbl">
+        <thead><tr><th>Time</th><th>Item</th><th>Cat.</th><th class="num">Qty</th><th class="num">Price</th><th class="num">Total ETB</th><th>Note</th><th></th></tr></thead>
+        <tbody id="sales-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ INVENTORY ═══ -->
+<div class="section" id="tab-inventory">
+  <div class="metrics">
+    <div class="metric"><div class="ml">Total Items</div><div class="mv" id="inv-total">0</div></div>
+    <div class="metric coral"><div class="ml">Low Stock</div><div class="mv" id="inv-low">0</div></div>
+    <div class="metric teal"><div class="ml">In Stock</div><div class="mv" id="inv-ok">0</div></div>
+    <div class="metric amber"><div class="ml">Out of Stock</div><div class="mv" id="inv-out">0</div></div>
+  </div>
+  <!-- Bakery / Daily supplies -->
+  <div class="card">
+    <div class="card-head">
+      <h3>🍞 Daily Supplies (Injera, Bread, Milk)</h3>
+      <button class="btn btn-teal btn-sm" onclick="openAddItem('daily_supply')">+ Add Item</button>
+    </div>
+    <div class="scroll-wrap">
+      <table class="tbl" id="inv-supply-tbl">
+        <thead><tr><th>Item</th><th class="num">Price/Unit (ETB)</th><th class="num">Bought Today</th><th class="num">Sold Today</th><th class="num">Remaining</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="inv-supply-body"></tbody>
+      </table>
+    </div>
+  </div>
+  <!-- Soft Drinks -->
+  <div class="card">
+    <div class="card-head">
+      <h3>🥤 Soft Drinks</h3>
+      <button class="btn btn-teal btn-sm" onclick="openAddItem('softdrink')">+ Add Item</button>
+    </div>
+    <div class="scroll-wrap">
+      <table class="tbl">
+        <thead><tr><th>Brand / Item</th><th class="num">Buy Price</th><th class="num">Sell Price</th><th class="num">Bought</th><th class="num">Sold</th><th class="num">Stock</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="inv-soft-body"></tbody>
+      </table>
+    </div>
+  </div>
+  <!-- Beer -->
+  <div class="card">
+    <div class="card-head">
+      <h3>🍺 Beers</h3>
+      <button class="btn btn-teal btn-sm" onclick="openAddItem('beer')">+ Add Item</button>
+    </div>
+    <div class="scroll-wrap">
+      <table class="tbl">
+        <thead><tr><th>Brand / Item</th><th class="num">Buy Price</th><th class="num">Sell Price</th><th class="num">Bought</th><th class="num">Sold</th><th class="num">Stock</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="inv-beer-body"></tbody>
+      </table>
+    </div>
+  </div>
+  <!-- Other Beverages -->
+  <div class="card">
+    <div class="card-head">
+      <h3>☕ Other Beverages (Tea, Juice, Water…)</h3>
+      <button class="btn btn-teal btn-sm" onclick="openAddItem('beverage')">+ Add Item</button>
+    </div>
+    <div class="scroll-wrap">
+      <table class="tbl">
+        <thead><tr><th>Item</th><th class="num">Buy Price</th><th class="num">Sell Price</th><th class="num">Bought</th><th class="num">Sold</th><th class="num">Stock</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="inv-bev-body"></tbody>
+      </table>
+    </div>
+  </div>
+  <!-- Vegan Food -->
+  <div class="card">
+    <div class="card-head">
+      <h3>🥗 Vegan Food</h3>
+      <button class="btn btn-teal btn-sm" onclick="openAddItem('vegan')">+ Add Item</button>
+    </div>
+    <div class="scroll-wrap">
+      <table class="tbl">
+        <thead><tr><th>Item</th><th class="num">Sell Price</th><th class="num">Stock</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="inv-vegan-body"></tbody>
+      </table>
+    </div>
+  </div>
+  <!-- Non-Vegan -->
+  <div class="card">
+    <div class="card-head">
+      <h3>🥩 Non-Vegan Food</h3>
+      <button class="btn btn-teal btn-sm" onclick="openAddItem('nonvegan')">+ Add Item</button>
+    </div>
+    <div class="scroll-wrap">
+      <table class="tbl">
+        <thead><tr><th>Item</th><th class="num">Sell Price</th><th class="num">Stock</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="inv-nonvegan-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MENU ═══ -->
+<div class="section" id="tab-menu">
+  <div class="card">
+    <div class="card-head">
+      <h3>Menu Items</h3>
+      <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">
+        <div class="frow" id="menu-filters">
+          <button class="fbtn active" onclick="filterMenu(this,'all')">All</button>
+          <button class="fbtn" onclick="filterMenu(this,'bar')">Beverages</button>
+          <button class="fbtn" onclick="filterMenu(this,'vegan')">Vegan</button>
+          <button class="fbtn" onclick="filterMenu(this,'nonvegan')">Non-Vegan</button>
+          <button class="fbtn" onclick="filterMenu(this,'other')">Other</button>
+        </div>
+        <button class="btn btn-teal btn-sm" onclick="openAddMenuItem()">+ Add Menu Item</button>
+      </div>
+    </div>
+    <div class="scroll-wrap">
+      <table class="tbl">
+        <thead><tr><th>Item</th><th>Category</th><th class="num">Price (ETB)</th><th class="num">Weekly Sold</th><th class="num">Weekly Revenue</th><th>Performance</th><th>Actions</th></tr></thead>
+        <tbody id="menu-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ REPORTS ═══ -->
+<div class="section" id="tab-reports">
+  <div class="metrics">
+    <div class="metric teal"><div class="ml">Weekly Total</div><div class="mv">138,680</div><div class="ms">ETB</div></div>
+    <div class="metric amber"><div class="ml">Today's Total</div><div class="mv" id="rpt-today">0</div><div class="ms">ETB</div></div>
+    <div class="metric"><div class="ml">Avg Daily</div><div class="mv">19,811</div><div class="ms">ETB</div></div>
+    <div class="metric"><div class="ml">Peak Day</div><div class="mv">Q5</div><div class="ms">26,280 ETB</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div class="card">
+      <div class="card-head"><h3>Revenue by Category</h3></div>
+      <div style="padding:14px;display:grid;gap:10px">
+        <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Vegan Food</span><span style="font-weight:500">84,800 ETB</span></div><div class="br-track" style="height:9px"><div class="br-fill" style="width:61%"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Beverages</span><span style="font-weight:500">46,405 ETB</span></div><div class="br-track" style="height:9px"><div class="br-fill" style="width:33%;background:var(--amber)"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Other Food</span><span style="font-weight:500">7,475 ETB</span></div><div class="br-track" style="height:9px"><div class="br-fill" style="width:5%;background:var(--coral)"></div></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>Daily Breakdown</h3></div>
+      <table class="tbl"><thead><tr><th>Day</th><th class="num">Revenue (ETB)</th><th>vs Avg</th></tr></thead><tbody id="daily-rpt-body"></tbody></table>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-head"><h3>Full Sales History</h3><button class="btn btn-amber btn-sm" onclick="exportCSV()">⬇ Export CSV</button></div>
+    <div class="scroll-wrap">
+      <table class="tbl"><thead><tr><th>Eth Date</th><th>Time</th><th>Item</th><th>Cat.</th><th class="num">Qty</th><th class="num">Price</th><th class="num">Revenue</th><th>Note</th></tr></thead><tbody id="all-sales-body"></tbody></table>
+    </div>
+  </div>
+</div>
+
+</div><!-- .app -->
+
+<!-- ═══ MODALS ═══ -->
+<!-- Add Item to Inventory -->
+<div class="modal-overlay" id="modal-additem">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-additem')">✕</button>
+    <h2 id="modal-additem-title">Add Inventory Item</h2>
+    <div class="form-grid">
+      <div class="fr"><label>Item Name</label><input type="text" id="ai-name" placeholder="e.g. Coca Cola 500ml"/></div>
+      <div class="fr"><label>Category</label><input type="text" id="ai-cat-display" readonly style="background:var(--bg)"/><input type="hidden" id="ai-cat"/></div>
+      <div id="ai-buyprice-row" class="fr"><label>Buy Price (ETB)</label><input type="number" id="ai-buyprice" min="0" step="1" placeholder="Cost per unit"/></div>
+      <div class="fr"><label>Sell Price (ETB)</label><input type="number" id="ai-sellprice" min="0" step="1" placeholder="Selling price"/></div>
+      <div id="ai-stock-row" class="fr"><label>Initial Stock</label><input type="number" id="ai-stock" min="0" value="0"/></div>
+      <button class="btn btn-teal" onclick="saveNewItem()">Add Item</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Menu Item -->
+<div class="modal-overlay" id="modal-addmenu">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-addmenu')">✕</button>
+    <h2>Add Menu Item</h2>
+    <div class="form-grid">
+      <div class="fr"><label>Item Name</label><input type="text" id="am-name" placeholder="Item name"/></div>
+      <div class="fr"><label>Category</label>
+        <select id="am-cat">
+          <option value="bar">Beverage</option>
+          <option value="vegan">Vegan Food</option>
+          <option value="nonvegan">Non-Vegan Food</option>
+          <option value="other">Other Food</option>
+        </select>
+      </div>
+      <div class="fr"><label>Price (ETB)</label><input type="number" id="am-price" min="0" step="1" placeholder="Selling price"/></div>
+      <button class="btn btn-teal" onclick="saveNewMenuItem()">Add to Menu</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Price Modal -->
+<div class="modal-overlay" id="modal-editprice">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-editprice')">✕</button>
+    <h2>Update Price</h2>
+    <div class="form-grid">
+      <div class="fr"><label>Item</label><input type="text" id="ep-name" readonly style="background:var(--bg)"/></div>
+      <div class="fr" id="ep-buy-row"><label>Buy Price (ETB)</label><input type="number" id="ep-buy" min="0" step="1"/></div>
+      <div class="fr"><label>Sell Price (ETB)</label><input type="number" id="ep-sell" min="0" step="1"/></div>
+      <button class="btn btn-teal" onclick="savePriceEdit()">Save Price</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// ETHIOPIAN CALENDAR ENGINE
+// ═══════════════════════════════════════════════════════
+const ETH_M_EN=['Meskerem','Tikimt','Hidar','Tahsas','Tir','Yekatit','Megabit','Miazia','Ginbot','Sene','Hamle','Nehase','Pagume'];
+const ETH_M_AM=['መስከረም','ጥቅምት','ኅዳር','ታኅሣሥ','ጥር','የካቲት','መጋቢት','ሚያዝያ','ግንቦት','ሰኔ','ሐምሌ','ነሐሴ','ጳጉሜ'];
+const ETH_D_AM=['እሑድ','ሰኞ','ማክሰኞ','ረቡዕ','ሐሙስ','አርብ','ቅዳሜ'];
+function gregToEth(d){
+  const JDN=Math.floor((1461*(d.getFullYear()+4800+Math.floor((d.getMonth()+1-14)/12)))/4)+Math.floor((367*(d.getMonth()+1-2-12*Math.floor((d.getMonth()+1-14)/12)))/12)-Math.floor((3*Math.floor((d.getFullYear()+4900+Math.floor((d.getMonth()+1-14)/12))/100))/4)+d.getDate()-32075;
+  const r=(JDN-1723856)%1461;const n=r%365+365*Math.floor(r/1460);
+  const yr=4*Math.floor((JDN-1723856)/1461)+Math.floor(r/365)-Math.floor(r/1460);
+  const mo=Math.floor(n/30)+1;const dy=n%30+1;
+  return{year:yr,month:Math.min(mo,13),day:dy};
+}
+function getEthDT(){
+  const now=new Date();const eth=gregToEth(now);
+  const h=(now.getHours()+6)%12||12;
+  const mm=String(now.getMinutes()).padStart(2,'0');const ss=String(now.getSeconds()).padStart(2,'0');
+  const ampm=now.getHours()>=6&&now.getHours()<18?'ቀን':'ሌሊት';
+  return{eth,timeStr:`${h}:${mm}:${ss} ${ampm}`,mEn:ETH_M_EN[eth.month-1],mAm:ETH_M_AM[eth.month-1],
+    dayAm:ETH_D_AM[now.getDay()],gregStr:now.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'}),
+    fullAm:`${eth.day} ${ETH_M_AM[eth.month-1]} ${eth.year} ዓ.ም`,fullEn:`${eth.day} ${ETH_M_EN[eth.month-1]} ${eth.year}`};
+}
+function todayEthKey(){const e=gregToEth(new Date());return`${e.year}-${e.month}-${e.day}`;}
+
+// ═══════════════════════════════════════════════════════
+// DATA STORE  (persisted in localStorage)
+// ═══════════════════════════════════════════════════════
+function load(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def;}catch(e){return def;}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+
+// ── MENU ITEMS ──
+let menuItems = load('ds_menu', [
+  // BAR
+  {id:'m1',name:'Tea',cat:'bar',price:35,q:[12,17,32,50,28,20,17],total:6160},
+  {id:'m2',name:'Ginger Tea',cat:'bar',price:50,q:[8,8,11,14,11,10,6],total:3400},
+  {id:'m3',name:'Spice Tea',cat:'bar',price:60,q:[1,0,3,7,4,6,3],total:1440},
+  {id:'m4',name:'Louze',cat:'bar',price:80,q:[7,1,6,2,3,0,2],total:1680},
+  {id:'m5',name:'Special Tea',cat:'bar',price:120,q:[0,0,1,1,2,1,0],total:600},
+  {id:'m6',name:'Orange Tea',cat:'bar',price:50,q:[0,0,0,0,1,0,0],total:50},
+  {id:'m7',name:'Korent Tea',cat:'bar',price:50,q:[0,0,0,0,0,0,1],total:50},
+  {id:'m8',name:'Half-liter Water',cat:'bar',price:30,q:[19,21,24,28,30,16,25],total:4890},
+  {id:'m9',name:'1L Water',cat:'bar',price:35,q:[12,9,21,21,23,16,16],total:4130},
+  {id:'m10',name:'2L Water',cat:'bar',price:50,q:[5,8,9,2,6,5,6],total:2050},
+  {id:'m11',name:'Quarter Water',cat:'bar',price:25,q:[1,0,1,0,0,0,0],total:50},
+  {id:'m12',name:'Soft Drink',cat:'bar',price:60,q:[9,8,5,19,12,8,10],total:4260},
+  {id:'m13',name:'Beer',cat:'bar',price:80,q:[0,1,11,4,9,7,3],total:2800},
+  {id:'m14',name:'Kegna Beer',cat:'bar',price:65,q:[12,8,14,6,14,13,7],total:4810},
+  {id:'m15',name:'Single',cat:'bar',price:60,q:[1,11,0,1,2,4,10],total:1740},
+  {id:'m16',name:'Janbo',cat:'bar',price:80,q:[0,0,0,5,0,7,15],total:2160},
+  {id:'m17',name:'Telba Juice',cat:'bar',price:100,q:[7,9,6,1,7,6,0],total:3600},
+  {id:'m18',name:'Juice',cat:'bar',price:120,q:[0,1,1,2,1,2,2],total:1080},
+  {id:'m19',name:'Areke',cat:'bar',price:60,q:[0,0,1,0,0,0,0],total:60},
+  {id:'m20',name:'Mirinda',cat:'bar',price:80,q:[0,0,0,0,1,1,0],total:160},
+  {id:'m21',name:'Ambo Water',cat:'bar',price:55,q:[3,0,1,3,0,0,0],total:385},
+  {id:'m22',name:'Big Bedele',cat:'bar',price:100,q:[0,0,0,2,0,2,0],total:400},
+  {id:'m23',name:'Wine',cat:'bar',price:450,q:[0,0,0,0,1,0,0],total:450},
+  // VEGAN
+  {id:'v1',name:'Beyeaynet',cat:'vegan',price:250,q:[19,25,22,14,32,20,6],total:34500},
+  {id:'v2',name:'Shiro',cat:'vegan',price:220,q:[3,4,5,6,9,3,10],total:8800},
+  {id:'v3',name:'Tegabino',cat:'vegan',price:320,q:[1,4,6,6,7,3,2],total:9280},
+  {id:'v4',name:'Half Half',cat:'vegan',price:300,q:[3,3,6,3,7,5,3],total:9000},
+  {id:'v5',name:'Suf',cat:'vegan',price:200,q:[3,5,2,7,4,1,1],total:4600},
+  {id:'v6',name:'Pasta Sauce',cat:'vegan',price:220,q:[2,4,2,2,1,0,4],total:3300},
+  {id:'v7',name:'Vegetable Pasta',cat:'vegan',price:240,q:[2,3,3,3,1,1,1],total:3360},
+  {id:'v8',name:'Ferfer',cat:'vegan',price:200,q:[0,1,2,5,3,2,2],total:3000},
+  {id:'v9',name:'Ful',cat:'vegan',price:190,q:[3,1,2,5,0,0,2],total:2470},
+  {id:'v10',name:'Telba',cat:'vegan',price:250,q:[0,3,1,1,1,1,1],total:2000},
+  {id:'v11',name:'Ertib',cat:'vegan',price:100,q:[1,1,1,4,2,0,2],total:1100},
+  {id:'v12',name:'Hilbet',cat:'vegan',price:400,q:[1,0,0,1,0,1,0],total:1200},
+  {id:'v13',name:'Chechebsa',cat:'vegan',price:170,q:[0,0,1,1,0,1,3],total:1020},
+  {id:'v14',name:'Salad',cat:'vegan',price:230,q:[2,0,1,0,1,0,0],total:920},
+  {id:'v15',name:'Atekelt',cat:'vegan',price:250,q:[0,0,0,1,0,0,0],total:250},
+  // NON-VEGAN
+  {id:'nv1',name:'Tibs',cat:'nonvegan',price:400,q:[0,0,0,0,0,0,0],total:0},
+  {id:'nv2',name:'Dulet',cat:'nonvegan',price:235,q:[0,0,0,0,0,0,0],total:0},
+  {id:'nv3',name:'Koanta Ferfer',cat:'nonvegan',price:350,q:[0,0,0,0,0,0,0],total:0},
+  {id:'nv4',name:'Sega Dulet',cat:'nonvegan',price:350,q:[0,0,0,0,0,0,0],total:0},
+  {id:'nv5',name:'Tibs Ferfer',cat:'nonvegan',price:250,q:[0,0,0,0,0,0,0],total:0},
+  {id:'nv6',name:'Kikil',cat:'nonvegan',price:330,q:[0,0,0,0,0,0,0],total:0},
+  {id:'nv7',name:'Gomen Besega',cat:'nonvegan',price:220,q:[0,0,0,0,0,0,0],total:0},
+  {id:'nv8',name:'Sandwich',cat:'nonvegan',price:120,q:[0,0,0,0,0,0,0],total:0},
+  {id:'nv9',name:'Egg w/ Sauce',cat:'nonvegan',price:200,q:[0,0,0,0,0,0,0],total:0},
+  {id:'nv10',name:'Scrambled Egg',cat:'nonvegan',price:180,q:[0,0,0,0,0,0,0],total:0},
+  {id:'nv11',name:'Bozena Shiro',cat:'nonvegan',price:250,q:[0,0,0,0,0,0,0],total:0},
+  {id:'nv12',name:'Shiro Bekibe',cat:'nonvegan',price:220,q:[0,0,0,0,0,0,0],total:0},
+  {id:'nv13',name:'Egg w/ Meat',cat:'nonvegan',price:250,q:[0,0,0,0,0,0,0],total:0},
+  {id:'nv14',name:'Special Ful',cat:'nonvegan',price:250,q:[0,0,0,0,0,0,0],total:0},
+  {id:'nv15',name:'Meat Stew',cat:'nonvegan',price:350,q:[0,0,0,0,0,0,0],total:0},
+  {id:'nv16',name:'Pasta w/ Meat',cat:'nonvegan',price:250,q:[0,0,0,0,0,0,0],total:0},
+  // OTHER
+  {id:'o1',name:'Anbasha',cat:'other',price:50,q:[10,20,20,30,25,12,22],total:6950},
+  {id:'o2',name:'Injera',cat:'other',price:50,q:[1,2,1,1,0.5,0,1],total:325},
+  {id:'o3',name:'Dabo',cat:'other',price:20,q:[2,2,2,0,1,1,2],total:200},
+]);
+
+// ── INVENTORY ── (buy/sell tracking per category)
+let invSupply = load('ds_inv_supply', [
+  {id:'s1',name:'Injera',buyPrice:20,sellPrice:50,bought:0,sold:0,stock:0},
+  {id:'s2',name:'Dabo (Bread)',buyPrice:10,sellPrice:20,bought:0,sold:0,stock:0},
+  {id:'s3',name:'Milk',buyPrice:30,sellPrice:70,bought:0,sold:0,stock:0},
+]);
+let invSoft = load('ds_inv_soft', [
+  {id:'sd1',name:'Pepsi 500ml',buyPrice:30,sellPrice:60,bought:0,sold:0,stock:0},
+  {id:'sd2',name:'Coca Cola 500ml',buyPrice:30,sellPrice:60,bought:0,sold:0,stock:0},
+  {id:'sd3',name:'Mirinda 500ml',buyPrice:30,sellPrice:60,bought:0,sold:0,stock:0},
+  {id:'sd4',name:'Fanta 500ml',buyPrice:30,sellPrice:60,bought:0,sold:0,stock:0},
+  {id:'sd5',name:'Sprite 500ml',buyPrice:30,sellPrice:60,bought:0,sold:0,stock:0},
+  {id:'sd6',name:'Energy Drink',buyPrice:60,sellPrice:100,bought:0,sold:0,stock:0},
+  {id:'sd7',name:'Pepsi Plastic (Small)',buyPrice:20,sellPrice:40,bought:0,sold:0,stock:0},
+  {id:'sd8',name:'Mirinda Plastic',buyPrice:20,sellPrice:40,bought:0,sold:0,stock:0},
+  {id:'sd9',name:'Coca Cola Plastic',buyPrice:20,sellPrice:40,bought:0,sold:0,stock:0},
+  {id:'sd10',name:'Sprite Plastic',buyPrice:20,sellPrice:40,bought:0,sold:0,stock:0},
+  {id:'sd11',name:'Fanta Plastic',buyPrice:20,sellPrice:40,bought:0,sold:0,stock:0},
+]);
+let invBeer = load('ds_inv_beer', [
+  {id:'b1',name:'Saint George',buyPrice:45,sellPrice:80,bought:0,sold:0,stock:0},
+  {id:'b2',name:'Dashen',buyPrice:45,sellPrice:80,bought:0,sold:0,stock:0},
+  {id:'b3',name:'Habesha',buyPrice:45,sellPrice:80,bought:0,sold:0,stock:0},
+  {id:'b4',name:'Kegna',buyPrice:40,sellPrice:65,bought:0,sold:0,stock:0},
+  {id:'b5',name:'Bedele',buyPrice:42,sellPrice:75,bought:0,sold:0,stock:0},
+  {id:'b6',name:'Walia',buyPrice:45,sellPrice:80,bought:0,sold:0,stock:0},
+  {id:'b7',name:'Meta',buyPrice:45,sellPrice:80,bought:0,sold:0,stock:0},
+  {id:'b8',name:'Heineken',buyPrice:80,sellPrice:130,bought:0,sold:0,stock:0},
+]);
+let invBev = load('ds_inv_bev', [
+  {id:'bv1',name:'Tea (bag)',buyPrice:5,sellPrice:35,bought:0,sold:0,stock:0},
+  {id:'bv2',name:'Quarter Water',buyPrice:10,sellPrice:25,bought:0,sold:0,stock:0},
+  {id:'bv3',name:'Half-liter Water',buyPrice:15,sellPrice:30,bought:0,sold:0,stock:0},
+  {id:'bv4',name:'1L Water',buyPrice:20,sellPrice:35,bought:0,sold:0,stock:0},
+  {id:'bv5',name:'2L Water',buyPrice:30,sellPrice:50,bought:0,sold:0,stock:0},
+  {id:'bv6',name:'Ambo Water',buyPrice:30,sellPrice:55,bought:0,sold:0,stock:0},
+  {id:'bv7',name:'Juice (pack)',buyPrice:50,sellPrice:100,bought:0,sold:0,stock:0},
+  {id:'bv8',name:'Wine',buyPrice:250,sellPrice:450,bought:0,sold:0,stock:0},
+]);
+let invVegan = load('ds_inv_vegan', [
+  {id:'iv1',name:'Beyeaynet',sellPrice:250,stock:0},
+  {id:'iv2',name:'Shiro',sellPrice:220,stock:0},
+  {id:'iv3',name:'Tegabino',sellPrice:320,stock:0},
+  {id:'iv4',name:'Half Half',sellPrice:300,stock:0},
+  {id:'iv5',name:'Suf',sellPrice:200,stock:0},
+]);
+let invNonVegan = load('ds_inv_nonvegan', [
+  {id:'inv1',name:'Tibs',sellPrice:400,stock:0},
+  {id:'inv2',name:'Dulet',sellPrice:235,stock:0},
+  {id:'inv3',name:'Sega Dulet',sellPrice:350,stock:0},
+  {id:'inv4',name:'Kikil',sellPrice:330,stock:0},
+  {id:'inv5',name:'Gomen Besega',sellPrice:220,stock:0},
+  {id:'inv6',name:'Egg w/ Sauce',sellPrice:200,stock:0},
+  {id:'inv7',name:'Scrambled Egg',sellPrice:180,stock:0},
+  {id:'inv8',name:'Bozena Shiro',sellPrice:250,stock:0},
+  {id:'inv9',name:'Koanta Ferfer',sellPrice:350,stock:0},
+  {id:'inv10',name:'Tibs Ferfer',sellPrice:250,stock:0},
+  {id:'inv11',name:'Sandwich',sellPrice:120,stock:0},
+  {id:'inv12',name:'Pasta w/ Meat',sellPrice:250,stock:0},
+  {id:'inv13',name:'Meat Stew',sellPrice:350,stock:0},
+]);
+
+let salesLog = load('ds_sales', []);
+let salesFilter = 'all', menuFilter = 'all';
+let priceEditTarget = null; // {list, idx}
+let addItemCat = '';
+
+// ═══════════════════════════════════════════════════════
+// CLOCK
+// ═══════════════════════════════════════════════════════
+function tickClock(){
+  const d=getEthDT();
+  document.getElementById('ec-date').textContent=d.fullAm;
+  document.getElementById('ec-time').textContent=d.timeStr;
+  document.getElementById('ec-day').textContent=d.dayAm;
+  document.getElementById('dh-date').textContent=d.fullAm;
+  document.getElementById('dh-greg').textContent=d.gregStr;
+  document.getElementById('dh-clk').textContent=d.timeStr;
+}
+setInterval(tickClock,1000); tickClock();
+
+// ═══════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════
+const catLabel={bar:'Beverage',vegan:'Vegan Food',nonvegan:'Non-Vegan Food',other:'Other Food'};
+function uid(){return 'x'+Date.now()+Math.random().toString(36).slice(2,6);}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600);}
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function todaySales(){return salesLog.filter(s=>s.ethKey===todayEthKey());}
+
+function updateTodayCounters(){
+  const ts=todaySales();
+  const rev=ts.reduce((a,s)=>a+s.rev,0);
+  const units=ts.reduce((a,s)=>a+s.qty,0);
+  document.getElementById('ds-txn').textContent=ts.length;
+  document.getElementById('ds-rev').textContent=rev.toLocaleString();
+  document.getElementById('ds-units').textContent=units;
+  document.getElementById('d-txn').textContent=ts.length;
+  document.getElementById('d-rev').textContent=rev.toLocaleString();
+  document.getElementById('d-units').textContent=units;
+  document.getElementById('hdr-rev').textContent=rev.toLocaleString()+' ETB';
+  document.getElementById('rpt-today').textContent=rev.toLocaleString();
+}
+
+// ═══════════════════════════════════════════════════════
+// DASHBOARD CHARTS
+// ═══════════════════════════════════════════════════════
+const dayTotals=[15220,19470,21805,23010,26280,17175,15720];
+const dayLabels=['Q1','Q2','Q3','Q4','Q5','Q6','Q7'];
+function buildWeekChart(){
+  const mx=Math.max(...dayTotals);const mxi=dayTotals.indexOf(mx);
+  const bEl=document.getElementById('db-bars');const lEl=document.getElementById('db-lbls');
+  bEl.innerHTML='';lEl.innerHTML='';
+  dayTotals.forEach((v,i)=>{
+    const h=Math.round((v/mx)*100);
+    const c=document.createElement('div');c.className='c-col';
+    c.innerHTML=`<span class="c-v">${(v/1000).toFixed(1)}k</span><div class="c-bar${i===mxi?' hi':''}" style="height:${h}px"></div>`;
+    bEl.appendChild(c);
+    const l=document.createElement('div');l.className='c-col';
+    l.innerHTML=`<span class="c-lbl">${dayLabels[i]}</span>`;lEl.appendChild(l);
+  });
+}
+function buildTopBars(){
+  const sorted=[...menuItems].sort((a,b)=>b.total-a.total).slice(0,8);
+  const mx=sorted[0]?.total||1;
+  document.getElementById('top-bars').innerHTML=sorted.map(i=>`
+    <div class="br-row"><span class="br-lbl">${i.name}</span>
+    <div class="br-track"><div class="br-fill" style="width:${Math.round((i.total/mx)*100)}%"></div></div>
+    <span class="br-val">${i.total.toLocaleString()}</span></div>`).join('');
+}
+function buildDailyRpt(){
+  const avg=138680/7;
+  document.getElementById('daily-rpt-body').innerHTML=dayTotals.map((v,i)=>{
+    const d=v-avg;const s=d>=0?'+':'';const c=d>=0?'bg':'br';
+    return`<tr><td>${dayLabels[i]}</td><td class="num" style="font-weight:500">${v.toLocaleString()}</td>
+    <td><span class="badge ${c}">${s}${Math.round(d/avg*100)}%</span></td></tr>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// SALE FORM
+// ═══════════════════════════════════════════════════════
+function refreshSaleItems(){
+  const cat=document.getElementById('sl-cat').value;
+  const items=cat?menuItems.filter(i=>i.cat===cat):menuItems;
+  document.getElementById('sl-item').innerHTML=items.map(i=>`<option value="${i.id}">${i.name} — ${i.price} ETB</option>`).join('');
+  autoFillPrice();
+}
+function autoFillPrice(){
+  const id=document.getElementById('sl-item').value;
+  const item=menuItems.find(i=>i.id===id);
+  if(item) document.getElementById('sl-price').value=item.price;
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('sl-item').addEventListener('change',autoFillPrice);
+});
+
+function addSale(){
+  const id=document.getElementById('sl-item').value;
+  const item=menuItems.find(i=>i.id===id);
+  if(!item){showToast('Select an item first');return;}
+  const qty=parseInt(document.getElementById('sl-qty').value)||1;
+  const price=parseFloat(document.getElementById('sl-price').value)||item.price;
+  const note=document.getElementById('sl-note').value.trim();
+  const d=getEthDT();
+  const rev=Math.round(price*qty);
+  salesLog.unshift({id:uid(),ethKey:todayEthKey(),ethDate:d.fullAm,ethTime:d.timeStr,
+    item:item.name,cat:item.cat,qty,price,rev,note});
+  save('ds_sales',salesLog);
+  updateTodayCounters();renderSalesTable();renderAllSales();
+  document.getElementById('sl-qty').value=1;document.getElementById('sl-note').value='';
+  showToast(`✓ ${qty}× ${item.name} = ${rev.toLocaleString()} ETB`);
+}
+
+function deleteSale(sid){
+  salesLog=salesLog.filter(s=>s.id!==sid);save('ds_sales',salesLog);
+  updateTodayCounters();renderSalesTable();renderAllSales();showToast('Sale deleted');
+}
+
+function filterSales(btn,f){
+  salesFilter=f;
+  document.querySelectorAll('#tab-daily .fbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');renderSalesTable();
+}
+
+function renderSalesTable(){
+  let rows=todaySales();
+  if(salesFilter!=='all') rows=rows.filter(s=>s.cat===salesFilter);
+  const tb=document.getElementById('sales-body');
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:24px">No sales recorded today yet</td></tr>`;return;}
+  tb.innerHTML=rows.map(s=>`<tr>
+    <td style="color:var(--text3);font-size:11px;white-space:nowrap">${s.ethTime}</td>
+    <td>${s.item}</td><td><span class="badge bx">${catLabel[s.cat]||s.cat}</span></td>
+    <td class="num">${s.qty}</td>
+    <td class="num">${s.price.toLocaleString()}</td>
+    <td class="num" style="font-weight:500;color:var(--teal)">${s.rev.toLocaleString()}</td>
+    <td style="color:var(--text3);font-size:11px">${s.note||'—'}</td>
+    <td><button class="btn btn-sm btn-coral" onclick="deleteSale('${s.id}')">✕</button></td>
+  </tr>`).join('');
+}
+
+function renderAllSales(){
+  const tb=document.getElementById('all-sales-body');
+  if(!salesLog.length){tb.innerHTML=`<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:20px">No sales yet</td></tr>`;return;}
+  tb.innerHTML=salesLog.map(s=>`<tr>
+    <td style="font-size:11px;white-space:nowrap">${s.ethDate||''}</td>
+    <td style="font-size:11px;color:var(--text3)">${s.ethTime||''}</td>
+    <td>${s.item}</td>
+    <td><span class="badge bx" style="font-size:10px">${catLabel[s.cat]||s.cat}</span></td>
+    <td class="num">${s.qty}</td>
+    <td class="num">${s.price.toLocaleString()}</td>
+    <td class="num" style="font-weight:500">${s.rev.toLocaleString()}</td>
+    <td style="font-size:11px;color:var(--text3)">${s.note||'—'}</td>
+  </tr>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// INVENTORY RENDER
+// ═══════════════════════════════════════════════════════
+function stockBadge(stk,threshold){
+  if(stk<=0) return `<span class="badge br">Out</span>`;
+  if(stk<=threshold) return `<span class="badge ba">Low</span>`;
+  return `<span class="badge bg">OK</span>`;
+}
+
+// Supply rows (injera, bread, milk)
+function renderInvSupply(){
+  document.getElementById('inv-supply-body').innerHTML=invSupply.map((item,i)=>`<tr>
+    <td><strong>${item.name}</strong></td>
+    <td class="num"><span class="price-cell" onclick="openPriceEdit('supply',${i},'${item.name}')">${item.sellPrice} ETB ✎</span></td>
+    <td class="num"><input class="tinp" type="number" value="${item.bought}" min="0" onchange="updateSupply(${i},'bought',this.value)" style="width:65px"/></td>
+    <td class="num"><input class="tinp" type="number" value="${item.sold}" min="0" onchange="updateSupply(${i},'sold',this.value)" style="width:65px"/></td>
+    <td class="num" style="font-weight:500;color:${item.stock<=0?'var(--coral)':item.stock<=5?'var(--amber)':'var(--teal)'}">${item.stock}</td>
+    <td>${stockBadge(item.stock,5)}</td>
+    <td><button class="btn btn-sm btn-coral" onclick="delInvItem('supply',${i})">✕</button></td>
+  </tr>`).join('');
+}
+
+function updateSupply(i,field,val){
+  invSupply[i][field]=parseInt(val)||0;
+  invSupply[i].stock=invSupply[i].bought-invSupply[i].sold;
+  save('ds_inv_supply',invSupply);renderInvSupply();updateInvMetrics();
+}
+
+// Beverage rows with buy/sell
+function renderBevCatTable(list,bodyId,saveKey,invKey){
+  document.getElementById(bodyId).innerHTML=list.map((item,i)=>`<tr>
+    <td><strong>${item.name}</strong></td>
+    <td class="num"><span class="price-cell" onclick="openPriceEdit('${invKey}',${i},'${item.name}',true)">${item.buyPrice} ✎</span></td>
+    <td class="num"><span class="price-cell" onclick="openPriceEdit('${invKey}',${i},'${item.name}')">${item.sellPrice} ✎</span></td>
+    <td class="num"><input class="tinp" type="number" value="${item.bought}" min="0" onchange="updateBevItem('${invKey}',${i},'bought',this.value)"/></td>
+    <td class="num"><input class="tinp" type="number" value="${item.sold}" min="0" onchange="updateBevItem('${invKey}',${i},'sold',this.value)"/></td>
+    <td class="num" style="font-weight:500;color:${item.stock<=0?'var(--coral)':item.stock<=5?'var(--amber)':'var(--teal)'}">${item.stock}</td>
+    <td>${stockBadge(item.stock,5)}</td>
+    <td><button class="btn btn-sm btn-coral" onclick="delInvItem('${invKey}',${i})">✕</button></td>
+  </tr>`).join('');
+}
+
+function updateBevItem(invKey,i,field,val){
+  const map={soft:invSoft,beer:invBeer,beverage:invBev};
+  const sk={soft:'ds_inv_soft',beer:'ds_inv_beer',beverage:'ds_inv_bev'};
+  map[invKey][i][field]=parseInt(val)||0;
+  map[invKey][i].stock=map[invKey][i].bought-map[invKey][i].sold;
+  save(sk[invKey],map[invKey]);
+  renderAllInventory();updateInvMetrics();
+}
+
+// Vegan/NonVegan rows (sell price + stock only)
+function renderFoodInvTable(list,bodyId,invKey){
+  document.getElementById(bodyId).innerHTML=list.map((item,i)=>`<tr>
+    <td><strong>${item.name}</strong></td>
+    <td class="num"><span class="price-cell" onclick="openPriceEdit('${invKey}',${i},'${item.name}')">${item.sellPrice} ETB ✎</span></td>
+    <td class="num"><input class="tinp" type="number" value="${item.stock}" min="0" onchange="updateFoodStock('${invKey}',${i},this.value)"/></td>
+    <td>${stockBadge(item.stock,3)}</td>
+    <td><button class="btn btn-sm btn-coral" onclick="delInvItem('${invKey}',${i})">✕</button></td>
+  </tr>`).join('');
+}
+
+function updateFoodStock(invKey,i,val){
+  const map={vegan:invVegan,nonvegan:invNonVegan};
+  const sk={vegan:'ds_inv_vegan',nonvegan:'ds_inv_nonvegan'};
+  map[invKey][i].stock=parseInt(val)||0;
+  save(sk[invKey],map[invKey]);renderAllInventory();updateInvMetrics();
+}
+
+function renderAllInventory(){
+  renderInvSupply();
+  renderBevCatTable(invSoft,'inv-soft-body','ds_inv_soft','soft');
+  renderBevCatTable(invBeer,'inv-beer-body','ds_inv_beer','beer');
+  renderBevCatTable(invBev,'inv-bev-body','ds_inv_bev','beverage');
+  renderFoodInvTable(invVegan,'inv-vegan-body','vegan');
+  renderFoodInvTable(invNonVegan,'inv-nonvegan-body','nonvegan');
+}
+
+function updateInvMetrics(){
+  const allItems=[...invSupply,...invSoft,...invBeer,...invBev,...invVegan,...invNonVegan];
+  const total=allItems.length;
+  const out=allItems.filter(i=>i.stock<=0).length;
+  const low=allItems.filter(i=>i.stock>0&&i.stock<=5).length;
+  const ok=allItems.filter(i=>i.stock>5).length;
+  document.getElementById('inv-total').textContent=total;
+  document.getElementById('inv-out').textContent=out;
+  document.getElementById('inv-low').textContent=low;
+  document.getElementById('inv-ok').textContent=ok;
+}
+
+function delInvItem(invKey,i){
+  const map={supply:invSupply,soft:invSoft,beer:invBeer,beverage:invBev,vegan:invVegan,nonvegan:invNonVegan};
+  const sk={supply:'ds_inv_supply',soft:'ds_inv_soft',beer:'ds_inv_beer',beverage:'ds_inv_bev',vegan:'ds_inv_vegan',nonvegan:'ds_inv_nonvegan'};
+  if(!confirm('Delete this item?')) return;
+  map[invKey].splice(i,1);save(sk[invKey],map[invKey]);
+  renderAllInventory();updateInvMetrics();showToast('Item deleted');
+}
+
+// ═══════════════════════════════════════════════════════
+// ADD ITEM TO INVENTORY
+// ═══════════════════════════════════════════════════════
+const catDisplayMap={supply:'Daily Supply (Injera/Bread/Milk)',softdrink:'Soft Drink',beer:'Beer',beverage:'Other Beverage',vegan:'Vegan Food',nonvegan:'Non-Vegan Food'};
+function openAddItem(cat){
+  addItemCat=cat;
+  document.getElementById('modal-additem-title').textContent='Add: '+catDisplayMap[cat];
+  document.getElementById('ai-cat').value=cat;
+  document.getElementById('ai-cat-display').value=catDisplayMap[cat];
+  document.getElementById('ai-name').value='';
+  document.getElementById('ai-buyprice').value='';
+  document.getElementById('ai-sellprice').value='';
+  document.getElementById('ai-stock').value='0';
+  const hasBuyPrice=!['vegan','nonvegan'].includes(cat);
+  document.getElementById('ai-buyprice-row').style.display=hasBuyPrice?'flex':'none';
+  openModal('modal-additem');
+}
+function saveNewItem(){
+  const name=document.getElementById('ai-name').value.trim();
+  if(!name){showToast('Enter item name');return;}
+  const cat=document.getElementById('ai-cat').value;
+  const buyPrice=parseFloat(document.getElementById('ai-buyprice').value)||0;
+  const sellPrice=parseFloat(document.getElementById('ai-sellprice').value)||0;
+  const stock=parseInt(document.getElementById('ai-stock').value)||0;
+  const id=uid();
+  const map={supply:invSupply,softdrink:invSoft,beer:invBeer,beverage:invBev,vegan:invVegan,nonvegan:invNonVegan};
+  const sk={supply:'ds_inv_supply',softdrink:'ds_inv_soft',beer:'ds_inv_beer',beverage:'ds_inv_bev',vegan:'ds_inv_vegan',nonvegan:'ds_inv_nonvegan'};
+  const hasBuy=!['vegan','nonvegan'].includes(cat);
+  if(hasBuy) map[cat].push({id,name,buyPrice,sellPrice,bought:stock,sold:0,stock});
+  else map[cat].push({id,name,sellPrice,stock});
+  save(sk[cat],map[cat]);
+  closeModal('modal-additem');renderAllInventory();updateInvMetrics();
+  showToast(`✓ Added "${name}" to inventory`);
+}
+
+// ═══════════════════════════════════════════════════════
+// PRICE EDITING
+// ═══════════════════════════════════════════════════════
+let priceEditCtx={};
+function openPriceEdit(invKey,i,name,isBuy=false){
+  priceEditCtx={invKey,i,isBuy};
+  document.getElementById('ep-name').value=name;
+  const map={supply:invSupply,soft:invSoft,beer:invBeer,beverage:invBev,vegan:invVegan,nonvegan:invNonVegan};
+  const item=map[invKey][i];
+  document.getElementById('ep-sell').value=item.sellPrice||item.price||0;
+  const hasBuy=item.buyPrice!==undefined;
+  document.getElementById('ep-buy-row').style.display=hasBuy?'flex':'none';
+  if(hasBuy) document.getElementById('ep-buy').value=item.buyPrice||0;
+  openModal('modal-editprice');
+}
+function savePriceEdit(){
+  const{invKey,i}=priceEditCtx;
+  const map={supply:invSupply,soft:invSoft,beer:invBeer,beverage:invBev,vegan:invVegan,nonvegan:invNonVegan};
+  const sk={supply:'ds_inv_supply',soft:'ds_inv_soft',beer:'ds_inv_beer',beverage:'ds_inv_bev',vegan:'ds_inv_vegan',nonvegan:'ds_inv_nonvegan'};
+  const item=map[invKey][i];
+  item.sellPrice=parseFloat(document.getElementById('ep-sell').value)||0;
+  if(item.buyPrice!==undefined) item.buyPrice=parseFloat(document.getElementById('ep-buy').value)||0;
+  if(item.price!==undefined) item.price=item.sellPrice;
+  save(sk[invKey],map[invKey]);
+  closeModal('modal-editprice');renderAllInventory();
+  showToast('✓ Price updated');
+}
+
+// ═══════════════════════════════════════════════════════
+// MENU
+// ═══════════════════════════════════════════════════════
+function filterMenu(btn,f){
+  menuFilter=f;
+  document.querySelectorAll('#menu-filters .fbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');renderMenu();
+}
+function renderMenu(){
+  const mx=Math.max(...menuItems.map(i=>i.total),1);
+  let items=menuFilter==='all'?menuItems:menuItems.filter(i=>i.cat===menuFilter);
+  items=[...items].sort((a,b)=>b.total-a.total);
+  document.getElementById('menu-body').innerHTML=items.map(it=>{
+    const sold=it.q?it.q.reduce((a,b)=>a+b,0):0;
+    const perf=it.total>5000?`<span class="badge bg">Top Seller</span>`:it.total>1000?`<span class="badge ba">Moderate</span>`:`<span class="badge bx">Slow</span>`;
+    const idx=menuItems.indexOf(it);
+    return`<tr>
+      <td>${it.name}</td>
+      <td><span class="badge bx">${catLabel[it.cat]||it.cat}</span></td>
+      <td class="num"><span class="price-cell" onclick="openMenuPriceEdit(${idx})">${it.price} ETB ✎</span></td>
+      <td class="num">${Math.round(sold)}</td>
+      <td class="num" style="font-weight:500">${it.total.toLocaleString()}</td>
+      <td>${perf}</td>
+      <td><button class="btn btn-sm btn-coral" onclick="delMenuItem(${idx})">✕</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function openMenuPriceEdit(idx){
+  const it=menuItems[idx];
+  priceEditCtx={invKey:'_menu',idx};
+  document.getElementById('ep-name').value=it.name;
+  document.getElementById('ep-sell').value=it.price;
+  document.getElementById('ep-buy-row').style.display='none';
+  openModal('modal-editprice');
+}
+// override savePriceEdit for menu
+const _origSavePE=savePriceEdit;
+function savePriceEdit(){
+  if(priceEditCtx.invKey==='_menu'){
+    const idx=priceEditCtx.idx;
+    menuItems[idx].price=parseFloat(document.getElementById('ep-sell').value)||0;
+    save('ds_menu',menuItems);closeModal('modal-editprice');
+    renderMenu();refreshSaleItems();showToast('✓ Menu price updated');return;
+  }
+  _origSavePE();
+}
+
+function delMenuItem(idx){
+  if(!confirm('Remove this menu item?')) return;
+  menuItems.splice(idx,1);save('ds_menu',menuItems);
+  renderMenu();refreshSaleItems();showToast('Menu item removed');
+}
+
+function openAddMenuItem(){
+  document.getElementById('am-name').value='';
+  document.getElementById('am-price').value='';
+  openModal('modal-addmenu');
+}
+function saveNewMenuItem(){
+  const name=document.getElementById('am-name').value.trim();
+  if(!name){showToast('Enter item name');return;}
+  const cat=document.getElementById('am-cat').value;
+  const price=parseFloat(document.getElementById('am-price').value)||0;
+  menuItems.push({id:uid(),name,cat,price,q:[0,0,0,0,0,0,0],total:0});
+  save('ds_menu',menuItems);closeModal('modal-addmenu');
+  renderMenu();refreshSaleItems();showToast(`✓ "${name}" added to menu`);
+}
+
+// ═══════════════════════════════════════════════════════
+// ADD ITEM MODAL CAT
+// ═══════════════════════════════════════════════════════
+function openAddItem(cat){
+  addItemCat=cat;
+  document.getElementById('modal-additem-title').textContent='Add: '+catDisplayMap[cat];
+  document.getElementById('ai-cat').value=cat;
+  document.getElementById('ai-cat-display').value=catDisplayMap[cat];
+  document.getElementById('ai-name').value='';
+  document.getElementById('ai-buyprice').value='';
+  document.getElementById('ai-sellprice').value='';
+  document.getElementById('ai-stock').value='0';
+  const hasBuy=!['vegan','nonvegan'].includes(cat);
+  document.getElementById('ai-buyprice-row').style.display=hasBuy?'flex':'none';
+  openModal('modal-additem');
+}
+
+// ═══════════════════════════════════════════════════════
+// EXPORT CSV
+// ═══════════════════════════════════════════════════════
+function exportCSV(){
+  if(!salesLog.length){showToast('No sales to export');return;}
+  const hdr='Ethiopian Date,Time,Item,Category,Qty,Unit Price (ETB),Total Revenue (ETB),Note\n';
+  const rows=salesLog.map(s=>`"${s.ethDate||''}","${s.ethTime||''}","${s.item}","${catLabel[s.cat]||s.cat}",${s.qty},${s.price},${s.rev},"${s.note||''}"`).join('\n');
+  const blob=new Blob([hdr+rows],{type:'text/csv'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`delina_shiro_${new Date().toISOString().slice(0,10)}.csv`;a.click();
+  showToast('✓ CSV exported');
+}
+
+// ═══════════════════════════════════════════════════════
+// TAB SWITCH
+// ═══════════════════════════════════════════════════════
+function switchTab(t,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');btn.classList.add('active');
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+buildWeekChart();buildTopBars();buildDailyRpt();
+refreshSaleItems();
+renderSalesTable();renderAllSales();
+renderAllInventory();updateInvMetrics();
+renderMenu();updateTodayCounters();
+
+// SERVICE WORKER for offline/PWA
+if('serviceWorker' in navigator){
+  const swCode=`
+const CACHE='delina-shiro-v1';
+self.addEventListener('install',e=>{self.skipWaiting();});
+self.addEventListener('activate',e=>{self.clients.claim();});
+self.addEventListener('fetch',e=>{
+  e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)));
+});`;
+  const blob=new Blob([swCode],{type:'application/javascript'});
+  navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
+}
+</script>
+</body>
+</html>
